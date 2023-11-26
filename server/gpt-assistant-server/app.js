@@ -9,7 +9,9 @@ var logger = require('morgan');
 var dotenv = require('dotenv');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/assistant');
+var assistantRouter = require('./routes/assistant');
+var filesRouter = require('./routes/files');
+var threadsRouter = require('./routes/threads');
 var  OpenAI = require('openai');
 var app = express();
 
@@ -25,7 +27,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/assistant', assistantRouter);
+app.use('/files', filesRouter);
+app.use('/threads', threadsRouter);
 
 dotenv.config({ path: './.env' , override: true});
 console.log( process.env.OPENAI_API_KEY," process.env.OPENAI_API_KEY");

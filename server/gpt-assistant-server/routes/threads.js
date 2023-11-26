@@ -10,7 +10,7 @@ router.post('/create', async function(req, res, next) {
 
 /* 从线程创建信息 */
 router.post('/createFromMessage', async function(req, res, next) {
-    const message = await openai.beta.threads.messages.create(
+    const message = await openaiInstance.beta.threads.messages.create(
         req.body.threadid,
         {
             role: "user",
@@ -22,7 +22,7 @@ router.post('/createFromMessage', async function(req, res, next) {
 
 /* 从线程创建run */
 router.post('/createFromRun', async function(req, res, next) {
-    const run = await openai.beta.threads.runs.create(
+    const run = await openaiInstance.beta.threads.runs.create(
         req.body.threadid,
         { 
             assistant_id: req.body.assistantid,
@@ -34,7 +34,7 @@ router.post('/createFromRun', async function(req, res, next) {
 
 /* 获取线程run状态 */
 router.get('/getRunStatus', async function(req, res, next) {
-    const runres = await openai.beta.threads.runs.retrieve(
+    const runres = await openaiInstance.beta.threads.runs.retrieve(
         req.query.threadid,
         req.query.runid
     );
@@ -43,11 +43,32 @@ router.get('/getRunStatus', async function(req, res, next) {
 
 /* 获取线程消息列表 */
 router.get('/getMessageList', async function(req, res, next) {
-    const threadMessages = await openai.beta.threads.messages.list(
+    const threadMessages = await openaiInstance.beta.threads.messages.list(
         req.query.threadid
     );
     res.send(threadMessages.data);
 })
 
+/* 提交消息到线程 */
+router.post('/submitMessage', async function(req, res, next) {
+    const message = await openaiInstance.beta.threads.messages.create(
+        req.body.threadid,
+        {
+            role: "user",
+            content: req.body.content // "I need to solve the equation `3x + 11 = 14`. Can you help me?"
+        }
+    );
+    res.send(message)
+})
 
+/* 运行线程 */
+router.post('/runThread', async function(req, res, next) {
+    const run = await openaiInstance.beta.threads.runs.create(
+        req.body.threadid,
+        { 
+            assistant_id: req.body.assistantid,
+        }
+    );
+    res.send(run)
+})
 module.exports = router;

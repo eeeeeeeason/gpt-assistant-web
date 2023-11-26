@@ -24,6 +24,7 @@ router.get('/getList', async function(req, res, next) {
 
 /* 获取assistant详情 */
 router.get('/getDetail', async function(req, res, next) {
+  console.log(req.query.id,"req.query.id");
   const assistant = await openaiInstance.beta.assistants.retrieve(
     req.query.id
   );

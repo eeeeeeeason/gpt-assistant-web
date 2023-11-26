@@ -2,6 +2,15 @@ var express = require('express');
 var router = express.Router();
 var openaiInstance = require('../middware');
 
+/* 列出assistant的file */
+router.get('/list', async function(req, res, next) {
+  const files = await openaiInstance.files.list(
+    req.query.assistantid,{
+    purpose: "fine-tune",
+  });
+  res.send(files);
+})
+
 /* 上传file */
 router.post('/upload', async function(req, res, next) {
   const file = await openaiInstance.files.create({
